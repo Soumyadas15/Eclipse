@@ -1,0 +1,14 @@
+extends layouts/main-layout.pug
+
+block content    
+    .resultsContainer
+
+block headerButton
+    a.newMessageIcon(href="/messages/new")
+        i.fas.fa-user-plus
+
+
+block scripts
+    script(src="/js/inboxPage.js")
+
+

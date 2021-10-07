@@ -1,0 +1,21 @@
+extends layouts/login-layout.pug 
+
+block content 
+     .loginContainer 
+          .header 
+              h1.head Welcome to 
+              h1.siteName &nbspSnippets 
+          span Speak your hearts out!
+          form(method="post")
+
+            h4.errorMessage #{errorMessage}
+
+            input(type="text", name="logUsername", placeholder="Email or Username", value = logUsername required="")
+            input(type="password", name="logPassword", placeholder="Password", required="")
+            .loginButtons
+                input(class = "login", type="submit", value="Login")
+                input(class = "signUp", type="submit", onclick="window.location.href = '/register'" , value="Sign Up")
+          .forgotPass
+            a(href="/requestReset") Forgot your password?
+          .devMessage 
+            h5 Made with love by Soumya 💓

@@ -1,0 +1,152 @@
+mixin createPostForm(userLoggedIn)
+    .postFormContainer
+       .userImageContainer 
+            img(src=userLoggedIn.profilePic, alt="Profile picture")
+       .textareaContainer 
+            textarea#postTextarea(maxlength = '200' placeholder="What's on your mind?")
+            .buttonsContainer 
+                button#submitPostButton(disabled="") Post
+
+mixin createCommentModal(userLoggedIn)
+        #commentModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='replyModalLabel', aria-hidden='true')
+               .modal-dialog(role='document')
+                    .modal-content
+                         .modal-header
+                             
+                         .modal-body
+                              #originalPostContainer
+                              .postFormContainer
+                                   .userImageContainer 
+                                        img(src=userLoggedIn.profilePic, alt="Profile picture")
+                                   .textareaContainer 
+                                        textarea#commentTextarea(placeholder="Write a comment")
+                         .modal-footer
+                              button.secondary(type='button', data-dismiss='modal') Close
+                              button#submitReplyButton.primary(type='button', disabled="") Comment 
+
+mixin createDeletePostModal()
+        #deletePostModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='delelePostModalLabel', aria-hidden='true')
+               .modal-dialog(role='document')
+                    .modal-content
+                         .delete-modal-header
+                              button.close(type='button', data-dismiss='modal',aria-lable='close') 
+                              span(aria-hidden='true')
+                         .delete-modal-body
+                             p Delete post?
+                         .delete-modal-footer
+                              button.delete-secondary(type='button', data-dismiss='modal') Close
+                              button#deletePostButton.primary(type='button') Delete
+
+mixin createPostModals(userLoggedIn)
+     +createCommentModal(userLoggedIn)
+     +createDeletePostModal()
+
+mixin createFollowButton(user, isFollowing)
+     -text = isFollowing ? "Following" : "Follow"
+     -buttonClass = isFollowing ? "followButton following" : "followButton"
+     button(class = buttonClass, data-user = user._id) #{text}
+
+mixin createTab(name, href, isSelected)
+     -className = isSelected ? "tab active" : "tab"
+     a(href=href, class = className)
+        span #{name}
+
+mixin createImageUploadModal()
+        #imageUploadModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='imageUploadModalLabel', aria-hidden='true')
+               .modal-dialog(role='document')
+                    .modal-content
+                         .imageUpload-modal-header
+                              h4#imageUploadModalLabel.modal-title Upload profile picture
+                              button.close(type='button', data-dismiss='modal',aria-lable='close') 
+                              span(aria-hidden='true')
+                         .imageUpload-modal-body
+                             input#filePhoto(type="file", name="filePhoto")
+
+                             .imagePreviewContainer 
+                                img#imagePreview
+                         .imageUpload-modal-footer
+                              button.imageUpload-secondary(type='button', data-dismiss='modal') Cancel
+                              button#imageUploadButton.primary(type='button') Upload
+
+mixin createCoverPhotoUploadModal()
+        #coverPhotoUploadModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='coverPhotoUploadModalLabel', aria-hidden='true')
+               .modal-dialog(role='document')
+                    .modal-content
+                         .imageUpload-modal-header
+                              h4#imageUploadModalLabel.modal-title Upload cover photo
+                              button.close(type='button', data-dismiss='modal',aria-lable='close') 
+                              span(aria-hidden='true')
+                         .imageUpload-modal-body
+                             input#coverPhoto(type="file", name="filePhoto")
+
+                             .imagePreviewContainer 
+                                img#coverPreview
+                         .imageUpload-modal-footer
+                              button.imageUpload-secondary(type='button', data-dismiss='modal') Cancel
+                              button#coverPhotoUploadButton.primary(type='button') Upload
+mixin createPostImageUploadModal()
+        #postImageUploadModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='postImageUploadModalLabel', aria-hidden='true')
+               .modal-dialog(role='document')
+                    .modal-content
+                         .imageUpload-modal-header
+                              h4#imageUploadModalLabel.modal-title Post an image
+                              button.close(type='button', data-dismiss='modal',aria-lable='close') 
+                              span(aria-hidden='true')
+                         .imageUpload-modal-body
+                             input#postImage(type="file", name="filePhoto")
+
+                             .imagePreviewContainer 
+                                img#postImagePreview
+                         .imageUpload-modal-footer
+                              button.imageUpload-secondary(type='button', data-dismiss='modal') Cancel
+                              button#postImageUploadButton.primary(type='button') Upload
+
+mixin createChatImage(chatData, userLoggedIn)
+               if(!chatData)
+                    return
+
+               - var i = 0
+               - var maxImagesToShow = 3
+               - var remainingUsers = chatData.users.length - maxImagesToShow
+               - remainingUsers-- // Remove 1 since we won't show our own image
+               
+               .chatImagesContainer
+                    if remainingUsers > 0
+                         .userCount
+                              span +#{remainingUsers}
+
+                    each user in chatData.users
+                         if chatData.users.length != 1 && user._id == userLoggedIn._id
+                              - continue
+                         else if i >= maxImagesToShow    
+                              - break
+                         
+                         img(src=user.profilePic, alt="User's profile picture", title=user.firstName)
+                         - i++
+
+mixin createChatNameModal(chat)
+    #chatNameModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='chatNameModalLabel', aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .chatName-modal-header
+                    h5#chatNameModalLabel.modal-title Update chat name
+                .chatName-modal-body
+                    input#chatNameTextbox(type="text", placeholder="Enter a name for this chat", value=chat.chatName)
+                .chatName-modal-footer
+                    button.chatName-secondary(type='button', data-dismiss='modal') Cancel
+                    button#chatNameButton.btn.btn-primary(type='button') Save
+
+mixin addNewUserModal(chat)
+    #addNewUserModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='addNewUserModalLabel', aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#addNewUserModalLabel.modal-title Add a new user to this chat
+                    button.close(type='button', data-dismiss='modal', aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    input#addNewUserModalTextBox(type="text", autocomplete="off", style="width: 100%;")
+                    .userList(style="overflow-y: scroll; max-height: 200px; margin-top: 10px;")
+                .modal-footer
+                    button.btn.btn-secondary(type='button', data-dismiss='modal') Cancel
+                    button#addNewUserModalButton.btn.btn-primary(type='button') Add user

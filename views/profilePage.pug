@@ -1,0 +1,81 @@
+extends layouts/main-layout.pug
+
+
+block content
+    if !profileUser
+        h3.notFoundMessage User not found 
+    else
+        script. 
+             var profileUserId = '!{profileUser._id}'
+        
+        - followersCount = profileUser.followers.length
+        - followingCount = profileUser.following.length
+
+        .profileHeaderContainer 
+            //- .profileUserImageContainer 
+            //-         img(src=profileUser.profilePic, class = 'headerProfilePic' srcset="Profile picture")
+
+            //-         if profileUser._id == userLoggedIn._id 
+            //-              button.profilePictureButton(data-toggle="modal", data-target="#imageUploadModal")
+            //-                  i.fas.fa-pen
+            .coverPhotoContainer 
+                   
+                        //- if profileUser._id == userLoggedIn._id 
+                        //-     button.coverPhotoButton(data-toggle="modal", data-target="#coverPhotoUploadModal")
+                        //-         i.fas.fa-pen
+                        
+                        img.coverPic(src=profileUser.coverPhoto, class = 'headerCoverPhoto' srcset="Cover photo")
+                        if profileUser._id == userLoggedIn._id 
+                            button.coverPhotoButton(data-toggle="modal", data-target="#coverPhotoUploadModal")
+                                i.fas.fa-pen
+            .profileUserImageContainer 
+                    img(src=profileUser.profilePic, class = 'headerProfilePic' srcset="Profile picture")
+
+                    if profileUser._id == userLoggedIn._id 
+                         button.profilePictureButton(data-toggle="modal", data-target="#imageUploadModal")
+                             i.fas.fa-pen
+            .nameContainer
+                h4 #{profileUser.firstName + " " + profileUser.lastName}
+                    //- if profileUser._username == itsmesoumya                       
+                    //-     .verifiedBadge
+                    //-         i.fas.fa-check-circle
+            h5 @#{profileUser.username}    
+            .profileButtonsContainer 
+                if profileUser._id != userLoggedIn._id 
+                    a.profileButton(href=`/messages/${profileUser._id}`)
+                        i.fas.fa-envelope
+                    - var profileUserId = profileUser._id.toString();
+                    - if(userLoggedIn.following && userLoggedIn.following.includes(profileUserId))
+                        +createFollowButton(profileUser, true)
+                    - else    
+                        +createFollowButton(profileUser, false)
+            if profileUser._id != userLoggedIn._id
+                .profileLabelsContainer 
+                        .followingCountContainer 
+                            a(href=`/profile/${profileUser.username}/following`) 
+                                h4.value #{followingCount}
+                                p Following
+                        .followersCountContainer
+                            a(href=`/profile/${profileUser.username}/followers`) 
+                                h4#followersValue.value #{followersCount}
+                                p Followers
+            else 
+                .ownerProfileLabelsContainer 
+                        .ownerFollowingCountContainer 
+                            a(href=`/profile/${profileUser.username}/following`) 
+                                h4.value #{followingCount}
+                                p Following
+                        .ownerFollowersCountContainer
+                            a(href=`/profile/${profileUser.username}/followers`) 
+                                h4#followersValue.value #{followersCount}
+                                p Followers
+        .tabsContainer 
+            
+        .postsContainer 
+             
+        +createPostModals(userLoggedIn)
+        +createImageUploadModal()
+        +createCoverPhotoUploadModal()
+    
+block scripts
+     script(src="/js/profile.js")

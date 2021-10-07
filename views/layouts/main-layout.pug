@@ -1,0 +1,106 @@
+include ../mixins/mixins
+
+doctype html
+html(lang="en")
+    head
+        meta(name='viewport' content='user-scalable=no, width=device-width, initial-scale=1.0')
+        meta(name="apple-mobile-web-app-capable" content="yes")
+        meta(name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0')
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css')
+        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css', integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh', crossorigin='anonymous')
+        link(rel="stylesheet", href="/css/main.css")
+        
+    body  
+        script. 
+             var userLoggedIn = !{userLoggedInJs};
+
+                
+               // - followersCount = !{userLoggedInJs}.followers.length
+               // - followingCount = !{userLoggedInJs}.following.length
+        .wrapper 
+            .row
+                nav.col-2
+                    ul.class
+                        li
+                            a(href="/")
+                                span.icon
+                                        i.fab.fa-envira
+                                span.mainTitle.d-none.d-md-block Snippets
+                        //- li.darkModeToggle
+                        //-     div.darkToggle
+                        //-         span.icon
+                        //-             i.fas.fa-moon
+                        //-         span.title.d-none.d-md-block Dark Mode       
+                        li
+                            a(href="/")
+                                span.icon
+                                    i.fas.fa-home
+                                span.title.d-none.d-md-block Home
+                        li
+                            a(href="/profile")
+                                span.icon
+                                    i.fas.fa-user
+                                span.title.d-none.d-md-block Profile
+                        li
+                            a(href="/search")
+                                span.icon
+                                    i.fas.fa-search
+                                span.title.d-none.d-md-block Search
+                        li
+                            a(href="/messages")
+                                span.icon
+                                    i.fas.fa-envelope
+                                span.title.d-none.d-md-block Chats 
+                                span#messagesBadge 
+                        li
+                            a(href="/notifications")
+                                span.icon
+                                    i.fas.fa-bell
+                                span.title.d-none.d-md-block Notifs
+                                span#notificationsBadge 
+
+                        li
+                            a(href="/logout")
+                                span.icon
+                                    i.fas.fa-sign-out-alt
+                                span.title.d-none.d-md-block Sign out   
+                .mainSectionContainer.col-10.col-md-8.col-lg-6
+                    .titleContainer 
+                          h1 #{pageTitle}
+                          block headerButton
+                    block content 
+                .sideTitleContainer.d-none.d-md-block.col-md-2-lg-6
+                    .sideCoverPhoto  
+                       img(src=userLoggedIn.coverPhoto, alt="Cover photo")
+                    .sideProfilePic
+                       img(src=userLoggedIn.profilePic, class = 'myProfileImage')
+                    .sideNameContainer   
+                        h2.sideName #{userLoggedIn.firstName + " " + userLoggedIn.lastName}
+                            //- verification 
+                            //- if userLoggedIn._username == "itsmesoumya"                 
+                            //-     .sideVerifiedBadge
+                            //-         i.fas.fa-check-circle
+                        p.sideUsername @#{userLoggedIn.username}          
+                    //- .sideNumberBox 
+                    //-     .sideFollowerCount 
+                    //-         p#followersValue.value #{followersCount}
+                    //-         h3 Followers
+                    //-     .sideFollowingCount
+                    //-         p #{followingCount}
+                    //-         h3 Following
+        #notificationList 
+        
+        script(src='https://kit.fontawesome.com/e30e838e18.js' crossorigin='anonymous')
+        script(src='https://code.jquery.com/jquery-3.6.0.min.js', integrity='sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=', crossorigin='anonymous')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js')
+        script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js', integrity='sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo', crossorigin='anonymous')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js', integrity='sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6', crossorigin='anonymous')
+        script(src='https://cdn.socket.io/4.2.0/socket.io.min.js')
+        block scripts
+        
+        script(src="/js/common.js")
+        script(src="/js/clientSocket.js")
